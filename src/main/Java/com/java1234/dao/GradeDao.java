@@ -15,6 +15,16 @@ import java.sql.ResultSet;
  */
 public class GradeDao {
 
+    /***
+     * @Description :
+     * @Method_Name : gradeList
+     * @Param :  @param con
+     *  @param pageBean
+     *  @param grade
+     * @return : java.sql.ResultSet
+     * @Creation Date : 2018/12/1
+     * @Author : Sean
+     */
     public ResultSet gradeList(Connection con, PageBean pageBean, Grade grade) throws Exception {
         StringBuffer sb = new StringBuffer("select * from t_grade");
         if (StringUtil.isNotEmpty(grade.getGradeName())) {
@@ -27,6 +37,15 @@ public class GradeDao {
         return pstmt.executeQuery();
     }
 
+    /***
+     * @Description :
+     * @Method_Name : gradeCount
+     * @Param :  @param con
+     * @param grade
+     * @return : int
+     * @Creation Date : 2018/12/1
+     * @Author : Sean
+     */
     public int gradeCount(Connection con, Grade grade) throws Exception {
         StringBuffer sb = new StringBuffer("select count(*) as total from t_grade");
         if (StringUtil.isNotEmpty(grade.getGradeName())) {
@@ -52,6 +71,41 @@ public class GradeDao {
     public int gradeDelete(Connection con, String delIds) throws Exception {
         String sql = "delete from t_grade where id in(" + delIds + ")";
         PreparedStatement pstmt = con.prepareStatement(sql);
+        return pstmt.executeUpdate();
+    }
+
+    /***
+     * @Description :
+     * @Method_Name : gradeAdd
+     * @Param :  @param con
+     * @param grade
+     * @return : int
+     * @Creation Date : 2018/12/1
+     * @Author : Sean
+     */
+    public int gradeAdd(Connection con, Grade grade) throws Exception {
+        String sql = "insert into t_grade values(null,?,?)";
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setString(1, grade.getGradeName());
+        pstmt.setString(2, grade.getGradeDesc());
+        return pstmt.executeUpdate();
+    }
+
+    /***
+     * @Description :
+     * @Method_Name : gradeModify
+     * @Param :  @param con
+     * @param grade
+     * @return : int
+     * @Creation Date : 2018/12/1
+     * @Author : Sean
+     */
+    public int gradeModify(Connection con, Grade grade) throws Exception {
+        String sql = "update t_grade set gradeName=?,gradeDesc=? where id=?";
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setString(1, grade.getGradeName());
+        pstmt.setString(2, grade.getGradeDesc());
+        pstmt.setInt(3, grade.getId());
         return pstmt.executeUpdate();
     }
 }
