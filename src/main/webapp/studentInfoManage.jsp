@@ -11,6 +11,43 @@
     <script type="text/javascript" src="jquery-easyui-1.3.3/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="jquery-easyui-1.3.3/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript">
+
+        function deleteStudent() {
+            var selectedRows = $("#dg").datagrid('getSelections');
+            if (selectedRows.length == 0) {
+                $.messager.alert("系统提示", "请选择要删除的数据！");
+                return;
+            }
+            var strIds = [];
+            for (var i = 0; i < selectedRows.length; i++) {
+                strIds.push(selectedRows[i].stuId);
+            }
+            var ids = strIds.join(",");
+            $.messager.confirm("系统提示", "您确认要删掉这<font color=red>" + selectedRows.length + "</font>条数据吗？", function (r) {
+                if (r) {
+                    $.post("studentDelete", {delIds: ids}, function (result) {
+                        if (result.success) {
+                            $.messager.alert("系统提示", "您已成功删除<font color=red>" + result.delNums + "</font>条数据！");
+                            $("#dg").datagrid("reload");
+                        } else {
+                            $.messager.alert('系统提示', result.errorMsg);
+                        }
+                    }, "json");
+                }
+            });
+        }
+
+        function searchStudent() {
+            $('#dg').datagrid('load', {
+                stuNo: $('#s_stuNo').val(),
+                stuName: $('#s_stuName').val(),
+                sex: $('#s_sex').combobox("getValue"),
+                bbirthday: $('#s_bbirthday').datebox("getValue"),
+                ebirthday: $('#s_ebirthday').datebox("getValue"),
+                gradeId: $('#s_gradeId').combobox("getValue")
+            });
+        }
+
     </script>
 </head>
 <body style="margin: 5px;">
@@ -45,7 +82,7 @@
             <option value="女">女</option>
         </select>
         &nbsp;出生日期：&nbsp;<input class="easyui-datebox" name="s_bbirthday" id="s_bbirthday" editable="false" size="10"/>-><input
-                class="easyui-datebox" name="s_ebirthday" id="s_ebbirthday" editable="false" size="10"/>
+                class="easyui-datebox" name="s_ebirthday" id="s_ebirthday" editable="false" size="10"/>
         &nbsp;所属班级：&nbsp;<input class="easyui-combobox" id="s_gradeId" name="s_gradeId" size="10"
                                 data-options="panelHeight:'auto',editable:false,valueField:'id',textField:'gradeName',url:'gradeComboList'"/>
 

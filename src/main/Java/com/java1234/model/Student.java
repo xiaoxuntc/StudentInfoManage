@@ -14,7 +14,7 @@ public class Student {
     private String stuName;
     private String sex;
     private Date birthday;
-    private int gradeId;
+    private int gradeId = -1;
     private String email;
     private String stuDesc;
 

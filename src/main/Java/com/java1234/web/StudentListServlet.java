@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.java1234.util.StringUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -36,6 +37,23 @@ public class StudentListServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String stuNo = request.getParameter("stuNo");
+        String stuName = request.getParameter("stuName");
+        String sex = request.getParameter("sex");
+        String bbirthday = request.getParameter("bbirthday");
+        String ebirthday = request.getParameter("ebirthday");
+        String gradeId = request.getParameter("gradeId");
+
+        Student student = new Student();
+        if (stuNo != null) {
+            student.setStuNo(stuNo);
+            student.setStuName(stuName);
+            student.setSex(sex);
+            if (StringUtil.isNotEmpty(gradeId)) {
+                student.setGradeId(Integer.parseInt(gradeId));
+            }
+        }
+
         String page = request.getParameter("page");
         String rows = request.getParameter("rows");
 
@@ -44,8 +62,8 @@ public class StudentListServlet extends HttpServlet {
         try {
             con = dbUtil.getCon();
             JSONObject result = new JSONObject();
-            JSONArray jsonArray = JsonUtil.formatRsToJsonArray(studentDao.studentList(con, pageBean));
-            int total = studentDao.studentCount(con);
+            JSONArray jsonArray = JsonUtil.formatRsToJsonArray(studentDao.studentList(con, pageBean, student, bbirthday, ebirthday));
+            int total = studentDao.studentCount(con, student, bbirthday, ebirthday);
             result.put("rows", jsonArray);
             result.put("total", total);
             ResponseUtil.write(response, result);
