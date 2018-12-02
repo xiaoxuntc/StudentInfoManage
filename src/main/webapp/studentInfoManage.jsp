@@ -48,6 +48,65 @@
             });
         }
 
+        function openStudentAddDialog() {
+            $("#dlg").dialog("open").dialog("setTitle", "添加学生信息");
+            url = "studentSave";
+        }
+
+        function saveStudent() {
+            $("#fm").form("submit", {
+                url: url,
+                onSubmit: function () {
+                    if ($('#sex').combobox("getValue") == "") {
+                        $.messager.alert("系统提示", "请选择性别");
+                        return false;
+                    }
+                    if ($('#gradeId').combobox("getValue") == "") {
+                        $.messager.alert("系统提示", "请选择所属班级");
+                        return false;
+                    }
+                    return $(this).form("validate");
+                },
+                success: function (result) {
+                    if (result.errorMsg) {
+                        $.messager.alert("系统提示", result.errorMsg);
+                        return;
+                    } else {
+                        $.messager.alert("系统提示", "保存成功");
+                        resetValue();
+                        $("#dlg").dialog("close");
+                        $("#dg").datagrid("reload");
+                    }
+                }
+            });
+        }
+
+        function resetValue() {
+            $("#stuNo").val("");
+            $("#stuName").val("");
+            $("#sex").combobox("setValue", "");
+            $("#birthday").datebox("setValue", "");
+            $("#gradeId").combobox("setValue", "");
+            $("#email").val("");
+            $("#stuDesc").val("");
+        }
+
+        function closeStudentDialog() {
+            $("#dlg").dialog("close");
+            resetValue();
+        }
+
+        function openStudentModifyDialog() {
+            var selectedRows = $("#dg").datagrid('getSelections');
+            if (selectedRows.length != 1) {
+                $.messager.alert("系统提示", "请选择一条要编辑的数据！");
+                return;
+            }
+            var row = selectedRows[0];
+            $("#dlg").dialog("open").dialog("setTitle", "编辑学生信息");
+            $("#fm").form("load", row);
+            url = "studentSave?stuId=" + row.stuId;
+        }
     </script>
 </head>
 <body style="margin: 5px;">
@@ -87,6 +146,51 @@
                                 data-options="panelHeight:'auto',editable:false,valueField:'id',textField:'gradeName',url:'gradeComboList'"/>
 
         <a href="javascript:searchStudent()" class="easyui-linkbutton" iconCls="icon-search" plain="true">搜索</a></div>
+</div>
+<div id="dlg" class="easyui-dialog" style="width: 570px;height: 350px;padding: 10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <form id="fm" method="post">
+        <table cellspacing="5px;">
+            <tr>
+                <td>学号：</td>
+                <td><input type="text" name="stuNo" id="stuNo" class="easyui-validatebox" required="true"/></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td>姓名：</td>
+                <td><input type="text" name="stuName" id="stuName" class="easyui-validatebox" required="true"/></td>
+            </tr>
+            <tr>
+                <td>性别：</td>
+                <td><select class="easyui-combobox" id="sex" name="sex" editable="false" panelHeight="auto"
+                            style="width: 155px">
+                    <option value="">请选择...</option>
+                    <option value="男">男</option>
+                    <option value="女">女</option>
+                </select></td>
+                <td></td>
+                <td>出生日期：</td>
+                <td><input class="easyui-datebox" name="birthday" id="birthday" required="true" editable="false"/></td>
+            </tr>
+            <tr>
+                <td>班级名称：</td>
+                <td><input class="easyui-combobox" id="gradeId" name="gradeId"
+                           data-options="panelHeight:'auto',editable:false,valueField:'id',textField:'gradeName',url:'gradeComboList'"/>
+                </td>
+                <td></td>
+                <td>Email：</td>
+                <td><input type="text" name="email" id="email" class="easyui-validatebox" required="true"
+                           validType="email"/></td>
+            </tr>
+            <tr>
+                <td valign="top">学生备注：</td>
+                <td colspan="4"><textarea rows="7" cols="50" name="stuDesc" id="stuDesc"></textarea></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div id="dlg-buttons">
+    <a href="javascript:saveStudent()" class="easyui-linkbutton" iconCls="icon-ok">保存</a>
+    <a href="javascript:closeStudentDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
 </div>
 </body>
 </html>

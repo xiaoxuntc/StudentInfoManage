@@ -39,6 +39,11 @@
     </servlet>
 
     <servlet>
+        <servlet-name>studentSaveServlet</servlet-name>
+        <servlet-class>com.java1234.web.StudentSaveServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>gradeDeleteServlet</servlet-name>
         <servlet-class>com.java1234.web.GradeDeleteServlet</servlet-class>
     </servlet>
@@ -81,5 +86,10 @@
     <servlet-mapping>
         <servlet-name>studentDeleteServlet</servlet-name>
         <url-pattern>/studentDelete</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>studentSaveServlet</servlet-name>
+        <url-pattern>/studentSave</url-pattern>
     </servlet-mapping>
 </web-app>

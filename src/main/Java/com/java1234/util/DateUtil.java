@@ -18,4 +18,9 @@ public class DateUtil {
         }
         return result;
     }
+
+    public static Date formatString(String str, String format) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.parse(str);
+    }
 }
