@@ -18,6 +18,11 @@ import com.java1234.util.DbUtil;
 import com.java1234.util.JsonUtil;
 import com.java1234.util.ResponseUtil;
 
+/***
+ * @Description :
+ * @Creation Date : 2018/12/3
+ * @Author : Sean
+ */
 public class GradeListServlet extends HttpServlet {
     DbUtil dbUtil = new DbUtil();
     GradeDao gradeDao = new GradeDao();

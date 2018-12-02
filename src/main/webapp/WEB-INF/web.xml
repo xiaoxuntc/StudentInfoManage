@@ -24,6 +24,16 @@
     </servlet>
 
     <servlet>
+        <servlet-name>gradeComboListServlet</servlet-name>
+        <servlet-class>com.java1234.web.GradeComboListServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>studentListServlet</servlet-name>
+        <servlet-class>com.java1234.web.StudentListServlet</servlet-class>
+    </servlet>
+
+    <servlet>
         <servlet-name>gradeSaveServlet</servlet-name>
         <servlet-class>com.java1234.web.GradeSaveServlet</servlet-class>
     </servlet>
@@ -41,6 +51,16 @@
     <servlet-mapping>
         <servlet-name>gradeListServlet</servlet-name>
         <url-pattern>/gradeList</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>gradeComboListServlet</servlet-name>
+        <url-pattern>/gradeComboList</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>studentListServlet</servlet-name>
+        <url-pattern>/studentList</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

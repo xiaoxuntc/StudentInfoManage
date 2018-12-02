@@ -1,7 +1,7 @@
 package com.java1234.model;
 
 /***
- * @Description : 用户实体类
+ * @Description : 用户实体
  * @Creation Date : 2018/11/17
  * @Author : Sean
  */

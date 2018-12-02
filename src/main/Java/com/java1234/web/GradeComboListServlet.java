@@ -12,19 +12,16 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import com.java1234.dao.GradeDao;
-import com.java1234.model.Grade;
-import com.java1234.model.PageBean;
 import com.java1234.util.DbUtil;
 import com.java1234.util.JsonUtil;
 import com.java1234.util.ResponseUtil;
-import com.java1234.util.StringUtil;
 
 /***
  * @Description :
- * @Creation Date : 2018/12/3
+ * @Creation Date : 2018/12/2
  * @Author : Sean
  */
-public class GradeSaveServlet extends HttpServlet {
+public class GradeComboListServlet extends HttpServlet {
     DbUtil dbUtil = new DbUtil();
     GradeDao gradeDao = new GradeDao();
 
@@ -37,31 +34,16 @@ public class GradeSaveServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        String gradeName = request.getParameter("gradeName");
-        String gradeDesc = request.getParameter("gradeDesc");
-        String id = request.getParameter("id");
-        Grade grade = new Grade(gradeName, gradeDesc);
-        if (StringUtil.isNotEmpty(id)) {
-            grade.setId(Integer.parseInt(id));
-        }
         Connection con = null;
         try {
             con = dbUtil.getCon();
-            int saveNums = 0;
-            JSONObject result = new JSONObject();
-            if (StringUtil.isNotEmpty(id)) {
-                saveNums = gradeDao.gradeModify(con, grade);
-            } else {
-                saveNums = gradeDao.gradeAdd(con, grade);
-            }
-            if (saveNums > 0) {
-                result.put("success", "true");
-            } else {
-                result.put("success", "true");
-                result.put("errorMsg", "保存失败");
-            }
-            ResponseUtil.write(response, result);
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", "");
+            jsonObject.put("gradeName", "请选择...");
+            jsonArray.add(jsonObject);
+            jsonArray.addAll(JsonUtil.formatRsToJsonArray(gradeDao.gradeList(con, null, null)));
+            ResponseUtil.write(response, jsonArray);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -72,6 +54,4 @@ public class GradeSaveServlet extends HttpServlet {
             }
         }
     }
-
-
 }

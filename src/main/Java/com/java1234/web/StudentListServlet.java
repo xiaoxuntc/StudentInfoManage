@@ -11,22 +11,21 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import com.java1234.dao.GradeDao;
-import com.java1234.model.Grade;
+import com.java1234.dao.StudentDao;
+import com.java1234.model.Student;
 import com.java1234.model.PageBean;
 import com.java1234.util.DbUtil;
 import com.java1234.util.JsonUtil;
 import com.java1234.util.ResponseUtil;
-import com.java1234.util.StringUtil;
 
 /***
  * @Description :
  * @Creation Date : 2018/12/3
  * @Author : Sean
  */
-public class GradeSaveServlet extends HttpServlet {
+public class StudentListServlet extends HttpServlet {
     DbUtil dbUtil = new DbUtil();
-    GradeDao gradeDao = new GradeDao();
+    StudentDao studentDao = new StudentDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,30 +36,18 @@ public class GradeSaveServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        String gradeName = request.getParameter("gradeName");
-        String gradeDesc = request.getParameter("gradeDesc");
-        String id = request.getParameter("id");
-        Grade grade = new Grade(gradeName, gradeDesc);
-        if (StringUtil.isNotEmpty(id)) {
-            grade.setId(Integer.parseInt(id));
-        }
+        String page = request.getParameter("page");
+        String rows = request.getParameter("rows");
+
+        PageBean pageBean = new PageBean(Integer.parseInt(page), Integer.parseInt(rows));
         Connection con = null;
         try {
             con = dbUtil.getCon();
-            int saveNums = 0;
             JSONObject result = new JSONObject();
-            if (StringUtil.isNotEmpty(id)) {
-                saveNums = gradeDao.gradeModify(con, grade);
-            } else {
-                saveNums = gradeDao.gradeAdd(con, grade);
-            }
-            if (saveNums > 0) {
-                result.put("success", "true");
-            } else {
-                result.put("success", "true");
-                result.put("errorMsg", "保存失败");
-            }
+            JSONArray jsonArray = JsonUtil.formatRsToJsonArray(studentDao.studentList(con, pageBean));
+            int total = studentDao.studentCount(con);
+            result.put("rows", jsonArray);
+            result.put("total", total);
             ResponseUtil.write(response, result);
         } catch (Exception e) {
             e.printStackTrace();

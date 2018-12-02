@@ -16,18 +16,18 @@ import java.sql.ResultSet;
 public class GradeDao {
 
     /***
-     * @Description :
+     * @Description : 列表
      * @Method_Name : gradeList
-     * @Param :  @param con
-     *  @param pageBean
-     *  @param grade
+     * @Param : @param con
+     * @param : pageBean
+     * @param : grade
      * @return : java.sql.ResultSet
      * @Creation Date : 2018/12/1
      * @Author : Sean
      */
     public ResultSet gradeList(Connection con, PageBean pageBean, Grade grade) throws Exception {
         StringBuffer sb = new StringBuffer("select * from t_grade");
-        if (StringUtil.isNotEmpty(grade.getGradeName())) {
+        if (grade != null && StringUtil.isNotEmpty(grade.getGradeName())) {
             sb.append(" and gradeName like '%" + grade.getGradeName() + "%'");
         }
         if (pageBean != null) {
@@ -38,10 +38,10 @@ public class GradeDao {
     }
 
     /***
-     * @Description :
+     * @Description : 计数
      * @Method_Name : gradeCount
      * @Param :  @param con
-     * @param grade
+     * @param : grade
      * @return : int
      * @Creation Date : 2018/12/1
      * @Author : Sean
@@ -60,13 +60,14 @@ public class GradeDao {
         }
     }
 
-    /**
-     * delete from tableName where field in (1,3,5)
-     *
-     * @param con
-     * @param delIds
-     * @return
-     * @throws Exception
+    /***
+     * @Description : 删除 delete from tableName where field in (1,3,5)
+     * @Method_Name : gradeDelete
+     * @Param :  @param con
+     * @param : delIds
+     * @return : int
+     * @Creation Date : 2018/12/3
+     * @Author : Sean
      */
     public int gradeDelete(Connection con, String delIds) throws Exception {
         String sql = "delete from t_grade where id in(" + delIds + ")";
@@ -75,10 +76,10 @@ public class GradeDao {
     }
 
     /***
-     * @Description :
+     * @Description : 增加
      * @Method_Name : gradeAdd
      * @Param :  @param con
-     * @param grade
+     * @param : grade
      * @return : int
      * @Creation Date : 2018/12/1
      * @Author : Sean
@@ -92,10 +93,10 @@ public class GradeDao {
     }
 
     /***
-     * @Description :
+     * @Description : 修改
      * @Method_Name : gradeModify
      * @Param :  @param con
-     * @param grade
+     * @param : grade
      * @return : int
      * @Creation Date : 2018/12/1
      * @Author : Sean

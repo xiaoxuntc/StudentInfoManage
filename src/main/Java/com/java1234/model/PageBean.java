@@ -1,7 +1,7 @@
 package com.java1234.model;
 
 /***
- * @Description : 分页
+ * @Description : 分页实体
  * @Creation Date : 2018/11/24
  * @Author : Sean
  */
@@ -44,6 +44,4 @@ public class PageBean {
     public int getStart() {
         return (page - 1) * rows;
     }
-
-
 }
